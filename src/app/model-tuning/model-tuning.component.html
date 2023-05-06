@@ -1,0 +1,73 @@
+<div class="card">
+    <div class="card-header" id="headingThree" role="heading" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"><a>Max Number of Hands : {{maxNumHands}}<i class="fa fa-angle-down"></i></a></div>
+    <div class="collapse" id="collapseThree" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+            <div>
+
+                <input (click)="sendParams()" type="range" min="1" max="4" [(ngModel)]="this.maxNumHands" class="range range-xs" step="1" />
+                <div class="w-full flex justify-between text-xs px-2">
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header" role="heading" data-toggle="collapse" data-target="#collapseThree2" aria-expanded="false" aria-controls="collapseThree"><a>Model Complexity<i class="fa fa-angle-down"></i></a></div>
+    <div class="collapse" id="collapseThree2" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+
+
+            <input (click)="sendParams()" type="range" min="0" max="1" [(ngModel)]="modelComplexity" class="range range-xs" step="1" />
+            <div class="w-full flex justify-between text-xs px-2">
+                <span>Lite</span>
+                <span>Full</span>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header" role="heading" data-toggle="collapse" data-target="#collapseThree3" aria-expanded="false" aria-controls="collapseThree"><a>Detection confidence: {{minDetectionConfidence}}<i class="fa fa-angle-down"></i></a></div>
+    <div class="collapse" id="collapseThree3" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+
+            <input (click)="sendParams()" type="range" min="0" max="1" [(ngModel)]="minDetectionConfidence" class="range range-xs" step="0.1" />
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header" role="heading" data-toggle="collapse" data-target="#collapseThree4" aria-expanded="false" aria-controls="collapseThree"><a>Tracking confidence: {{minTrackingConfidence}}<i class="fa fa-angle-down"></i></a></div>
+    <div class="collapse" id="collapseThree4" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+            <input (click)="sendParams()" type="range" min="0" max="1" [(ngModel)]="minTrackingConfidence" class="range range-xs" step="0.1" /> </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header" style="align-items: center;
+    display: flex;"><a style="margin-right: 10%;">Selfie mode</a>
+        <input (click)="sendParams()" type="checkbox" class="toggle" [(ngModel)]="selfieMode" />
+    </div>
+
+</div>
+
+
+
+<div style="display:none">
+    <input class="form-control country-code" type="number" placeholder="01">
+    <input class="form-control" type="number" placeholder>
+    <input class="form-control country-code" type="number" placeholder="01">
+    <input class="form-control" type="number" placeholder="1234567895">
+</div>

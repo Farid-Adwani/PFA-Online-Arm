@@ -1,0 +1,68 @@
+<div class="theme-title">
+    <div class="media" [hidden]="this.saving">
+        <div>
+            <h2>My Series</h2>
+            <h4>Custom Sequences</h4>
+        </div>
+        <div class="media-body text-right">
+            <a class="icon-btn btn-outline-light btn-sm m-r-15 search" href="#"> <i data-feather="search"></i></a>
+            <form class="form-inline search-form">
+                <div class="form-group">
+                    <input class="form-control-plaintext" type="search" placeholder="Search..">
+                    <div class="icon-close close-search"></div>
+                </div>
+            </form><a (click)="this.setSaving(true)" class="icon-btn btn-outline-light btn-sm m-r-15 "><i class="fa fa-plus">                              </i></a><a class="icon-btn btn-outline-light btn-sm close-panel" href="#"><i data-feather="x"></i></a>
+        </div>
+    </div>
+
+
+
+
+    <div class="media" [hidden]="!this.saving">
+        <div>
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Name">
+                <button [ngStyle]="{'background-color':this.moving?'red':'blue'}" (click)="toggleMoving()" style="align-content: center;width: 40%;margin: 1%;" class="btn  button-effect btn-sm" type="button">Move</button>
+                <button [ngStyle]="{'background-color':this.delaying?'red':'blue'}" (click)="toggleDelaying()" style="align-content: center;width: 40%;margin: 1%;" class="btn  button-effect btn-sm" type="button">Delay</button>
+
+            </div>
+
+
+        </div>
+        <div class="media-body text-right">
+            <a (click)="this.setSaving(false)" style="margin:1%;" class="icon-btn btn-outline-light btn-sm m-r-15" href="#"> <i class="fa fa-trash"></i></a>
+            <a (click)="this.setSerie()" style="margin:1%;" class="icon-btn btn-outline-light btn-sm m-r-15" href="#"> <i class="fa fa-save"></i></a>
+
+        </div>
+    </div>
+
+</div>
+<ul class="chat-main">
+    <li *ngFor="let serie of this.series; let i = index">
+        <div class="chat-box">
+            <div class="media">
+                <div class="profile" style="border: 2px solid cornflowerblue;" [ngStyle]="{ 'background-color': serie.color}"></div>
+                <div class="details">
+                    <h5>{{serie.name}}</h5>
+                    <h6>{{serie.date.toLocaleString('en-US', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}}</h6>
+                </div>
+                <div class="media-body">
+
+                    <a *ngIf="!serie.playing; else elseBlock" (click)="playSerie(i)" class="icon-btn btn-outline-primary btn-sm pull-right favourite" href="#"> <i class="fa fa-play"> </i></a>
+                    <ng-template #elseBlock>
+                        <a (click)="endSerie(i)" class="icon-btn btn-outline-primary btn-sm pull-right favourite" href="#"> <i class="fa fa-pause"> </i></a>
+                    </ng-template>
+
+                </div>
+            </div>
+        </div>
+    </li>
+
+</ul>
+
+
+
+
+
+
+<a style="display:none" class="icon-btn btn-outline-light btn-sm m-r-15 search" href="#"> <i data-feather="plus"></i></a>
