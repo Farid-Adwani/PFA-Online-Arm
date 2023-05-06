@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Serie } from './serie';
+import { Move } from './move';
 
 @Component({
   selector: 'app-my-series',
@@ -11,6 +12,13 @@ export class MySeriesComponent {
   public saving : boolean= false;
   public moving : boolean= false;
   public delaying : boolean= false;
+  public tempName : string = "My Serie";
+
+  public tempSerie : Serie= new Serie();
+  public tempMove : Move = new Move();
+  public tempDate : Date = new Date();
+
+
 
 
   
@@ -33,8 +41,7 @@ export class MySeriesComponent {
 
   endSerie(index:number){
     this.series[index].playing=false;
-    this.delaying=false;
-    this.moving=false;
+    
 
   }
   setSaving(state:boolean){
@@ -42,21 +49,99 @@ export class MySeriesComponent {
     if(!state){
       this.delaying=false;
       this.moving=false;
+      this.tempSerie=new Serie();
     }
   }
 
   toggleMoving(){
     this.moving=!this.moving;
+    if(this.delaying){
+     this.createDelay();
+    }
     this.delaying=false;
+    if(!this.moving){
+      this.createMove()
+    }
 
   }
 
   toggleDelaying(){
     this.delaying=!this.delaying;
+    if(this.moving){
+       this.createMove()
+      }
     this.moving=false;
+
+
+    if(!this.delaying){
+      this.createDelay();
+    }else{
+      this.tempDate=new Date();
+
+    }
   }
 
   setSerie(){
+    
+
+    if(this.delaying){
+     this.createDelay()
+    }
+
+    if(this.moving){
+      this.createMove();
+    }
+
+    this.tempSerie.color=this.getRandomColor();
+
+    this.series.push(Object.assign({}, this.tempSerie));
     this.setSaving(false);
   }
+
+  updateName(){
+    console.log(this.tempSerie)
+  }
+
+  debugSerie(selected:Serie){
+    console.log(selected)
+  }
+
+  createDelay(){
+    this.tempMove.base=0;
+    this.tempMove.axis1=0;
+    this.tempMove.axis2=0;
+    this.tempMove.rotation=0;
+    this.tempMove.up_down=0;
+    this.tempMove.gripper=0;
+    this.tempMove.delay=1000;
+
+    this.tempMove.delay=new Date().getTime() - this.tempDate.getTime() ;
+
+
+    this.tempSerie.moves.push(Object.assign({}, this.tempMove));
+
+  }
+
+  createMove(){
+    
+    this.tempMove.base=1;
+      this.tempMove.axis1=2;
+      this.tempMove.axis2=3;
+      this.tempMove.rotation=4;
+      this.tempMove.up_down=5;
+      this.tempMove.gripper=6;
+      this.tempMove.delay=0;
+
+
+      this.tempSerie.moves.push(Object.assign({}, this.tempMove));
+
+  }
+  getDelayText(){
+    if(this.delaying){
+      return (new Date().getTime() - this.tempDate.getTime()).toString();
+    }else{
+      return "Delay"
+    }
+  }
+
 }

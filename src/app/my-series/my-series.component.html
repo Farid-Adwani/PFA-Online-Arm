@@ -20,11 +20,12 @@
 
     <div class="media" [hidden]="!this.saving">
         <div>
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="Name">
-                <button [ngStyle]="{'background-color':this.moving?'red':'blue'}" (click)="toggleMoving()" style="align-content: center;width: 40%;margin: 1%;" class="btn  button-effect btn-sm" type="button">Move</button>
-                <button [ngStyle]="{'background-color':this.delaying?'red':'blue'}" (click)="toggleDelaying()" style="align-content: center;width: 40%;margin: 1%;" class="btn  button-effect btn-sm" type="button">Delay</button>
 
+
+            <div class="form-group">
+                <input (click)="updateName()" [(ngModel)]="this.tempSerie.name" class="form-control" type="text" placeholder="Name">
+                <button [ngStyle]="{'background-color':this.moving?'red':'blue'}" (click)="toggleMoving()" style="align-content: center;width: 40%;margin: 1%;" class="btn  button-effect btn-sm" type="button">Move</button>
+                <button [ngStyle]="{'background-color':this.delaying?'red':'blue'}" (click)="toggleDelaying()" style="align-content: center;width: 40%;margin: 1%;" class="btn  button-effect btn-sm" type="button">{{ this.getDelayText()}}</button>
             </div>
 
 
@@ -41,7 +42,7 @@
     <li *ngFor="let serie of this.series; let i = index">
         <div class="chat-box">
             <div class="media">
-                <div class="profile" style="border: 2px solid cornflowerblue;" [ngStyle]="{ 'background-color': serie.color}"></div>
+                <div (click)="debugSerie(serie)" class="profile" style="border: 2px solid cornflowerblue;" [ngStyle]="{ 'background-color': serie.color}"></div>
                 <div class="details">
                     <h5>{{serie.name}}</h5>
                     <h6>{{serie.date.toLocaleString('en-US', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}}</h6>
