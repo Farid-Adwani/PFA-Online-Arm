@@ -1,7 +1,16 @@
 <div class="chitchat-loader">
         <div><img src="../../../assets/images/logo_big.png" alt>
+             <div class="loader">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+          </div>
             <h3>Simply control your arm online</h3>
         </div>
+
+       
+
+          
     </div>
     <div class="chitchat-container sidebar-toggle">
         <nav class="main-nav on custom-scroll">
@@ -36,7 +45,7 @@
                 <ul class="sidebar-bottom">
                     <li><a class="icon-btn btn-light button-effect mode" href="#" data-tippy-content="Theme Mode" data-intro="Change mode"><i class="fa fa-moon-o"></i></a></li>
                     <li>
-                        <a class="icon-btn btn-light" href="login.html" data-tippy-content=" SignOut"> <i class="fa fa-power-off">  </i></a>
+                        <button class="icon-btn btn-light" (click)="logout()" data-tippy-content=" SignOut"> <i class="fa fa-power-off">  </i></button>
                     </li>
                 </ul>
             </div>
@@ -48,7 +57,7 @@
                         <div class="media">
                             <div>
                                 <h2>Overview</h2>
-                                <h4>Get An Idea &#x1F601;</h4>
+                                <h4>Get An Idea</h4>
                             </div>
                             <div class="media-body"><a class="icon-btn btn-outline-light button-effect pull-right mobile-back" href="#"><i class="ti-angle-right"></i></a><a class="icon-btn btn-outline-light button-effect pull-right mainnav" href="#"><i class="ti-layout-grid2"></i></a></div>
                         </div>
@@ -129,8 +138,8 @@
                         <div class="media">
                             <div class="profile"><img class="bg-img" src="../../../assets/images/2_1.jpg" alt="Avatar"></div>
                             <div class="details">
-                                <h5>Josephin water</h5>
-                                <h6>Alabma , USA</h6>
+                                <h5>Farid Adwani</h5>
+                                <h6>Tunisia</h6>
                             </div>
                             <div class="details edit">
                                 <form class="form-radious form-sm">
@@ -228,7 +237,7 @@
                     <div class="block">
                         <div class="media">
                             <div class="media-body">
-                                <h3>Integratin</h3>
+                                <h3>Arm</h3>
                             </div>
                             <div class="media-right">
                                 <a class="icon-btn btn-outline-light btn-sm pull-right previous" href="#"> <i data-feather="chevron-left"> </i></a>
@@ -236,11 +245,11 @@
                         </div>
 
                         <div class="form-group">
-                            <h5>Speed</h5>
+                            <h5>Smoothness</h5>
                         </div>
-                        <input class="form-control" id="exampleInputEmail12" type="number" placeholder="exp : 10">
+                        <input style="text-align: center;" [(ngModel)]="this.speed" class="form-control" id="exampleInputEmail12" type="number" placeholder="exp : 10">
 
-                        <button style="margin: 20%;     align-content: center;" class="btn btn-primary button-effect btn-sm" type="button">Submit</button>
+                        <button (click)="sendSpeed()" style="margin: 20%;     align-content: center;" class="btn btn-primary button-effect btn-sm" type="button">Submit</button>
 
 
 

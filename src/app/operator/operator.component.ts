@@ -49,12 +49,12 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges  {
 
   constructor (private webSocketService: WebSocketService,private dataSharingService: DataSharingService) { 
     this.subscription = this.dataSharingService.getData().subscribe(value => {
-
       if(value.constructor.name=="Serie"){
         this.cursor=0;
         this.playingSerie=value;
-
-
+      }
+      else if(value.constructor.name=="Number"){
+        this.webSocketService.send("#"+value.toString()+"\n");
       }
       });
   }
@@ -85,6 +85,7 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges  {
       
     }
   }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
 }

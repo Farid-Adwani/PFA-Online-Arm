@@ -12,7 +12,7 @@ export class ModelTuningComponent {
   @Input() public modelComplexity: number = 1;
   @Input() public minDetectionConfidence: number = 0.8;
   @Input() public minTrackingConfidence: number = 0.8;
-  @Input() public selfieMode: boolean = false;
+  @Input() public selfieMode: boolean = true;
   @Output() itemEvent = new EventEmitter<Tuning>();
 
   constructor(){

@@ -8,7 +8,7 @@
             <a class="icon-btn btn-outline-light btn-sm m-r-15 search" href="#"> <i data-feather="search"></i></a>
             <form class="form-inline search-form">
                 <div class="form-group">
-                    <input class="form-control-plaintext" type="search" placeholder="Search..">
+                    <input  [(ngModel)]="this.search" name="search" class="form-control-plaintext" type="search" placeholder="Search..">
                     <div class="icon-close close-search"></div>
                 </div>
             </form><a (click)="this.setSaving(true)" class="icon-btn btn-outline-light btn-sm m-r-15 "><i class="fa fa-plus">                              </i></a><a class="icon-btn btn-outline-light btn-sm close-panel" href="#"><i data-feather="x"></i></a>
@@ -40,7 +40,7 @@
 </div>
 <ul class="chat-main">
     <li *ngFor="let serie of this.series; let i = index">
-        <div class="chat-box">
+        <div  *ngIf="serie.name.indexOf(this.search)>=0" class="chat-box">
             <div class="media">
                 <div (click)="debugSerie(serie)" class="profile" style="border: 2px solid cornflowerblue;" [ngStyle]="{ 'background-color': serie.color}"></div>
                 <div class="details">

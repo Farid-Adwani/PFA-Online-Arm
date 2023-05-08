@@ -10,7 +10,7 @@ import threading
 import serial
 import time
 arduinoPort='/dev/ttyACM0'
-#arduino = serial.Serial(port=arduinoPort, baudrate=115200, timeout=.1)
+arduino = serial.Serial(port=arduinoPort, baudrate=115200, timeout=.1)
 
 string_to_send = ""
 old=""
@@ -20,7 +20,7 @@ def timer():
     global old
     if not string_to_send ==old:
         print("Received message from client: ", string_to_send)
-#        arduino.write((string_to_send+"\n").encode())
+        arduino.write((string_to_send+"\n").encode())
 
     old=string_to_send
     threading.Thread(target=timer).start()

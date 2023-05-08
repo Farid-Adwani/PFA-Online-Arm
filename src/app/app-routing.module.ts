@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { Error404Component } from './shared/error404/error404.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LoginComponent },
   { path: 'home', component: HomeComponent },
   { path: '**', component: Error404Component },
 ];

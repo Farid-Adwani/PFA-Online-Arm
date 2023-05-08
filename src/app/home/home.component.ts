@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from '../services/web-socket.service';
 import { Tuning } from '../model-tuning/Tuning';
+import { DataSharingService } from '../services/dataSharing.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,9 +24,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private ttsSubscription!: Subscription;
   public tts: number = 0;
+  public speed: number = 15;
+
 
       
-  constructor(private wsService: WebSocketService) {
+  constructor(private dataSharingService: DataSharingService,private wsService: WebSocketService,private router: Router) {
 
    }
 
@@ -32,6 +36,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     this.params=data;
 
+  }
+
+  sendSpeed(){
+    this.dataSharingService.sendData(this.speed);
+  }
+
+  logout(){
+    this.router.navigate(['']);
   }
 
   ngOnInit(): void {

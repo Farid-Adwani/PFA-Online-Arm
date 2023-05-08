@@ -23,7 +23,7 @@ export class MySeriesComponent {
   public tempDate : Date = new Date();
   public subscription: Subscription = new Subscription();
   public playingSerie : Serie= new Serie();
-
+  public search : string = "";
   
 
   constructor(private dataSharingService: DataSharingService) {
@@ -57,6 +57,10 @@ export class MySeriesComponent {
 
   getRandomColor(): string {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  }
+
+  changeSearch(){
+    console.log(this.search)
   }
 
   ngOnInit(){
