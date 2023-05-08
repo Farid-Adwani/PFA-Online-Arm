@@ -42,6 +42,7 @@ import { MySeriesComponent } from './my-series/my-series.component';
     HttpClientModule,
     CommonModule,
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

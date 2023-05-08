@@ -50,7 +50,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     document.addEventListener("keydown", (event: KeyboardEvent) => {
-      console.log(event.code);
       if (event.code === "Digit1") {
         this.jointImage = "../../assets/images/a.png";
         this.joint = "base";
@@ -97,13 +96,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       "../../../assets/js/bootstrap.js",
       "../../../assets/js/switchery.js",
       "../../../assets/js/easytimer.min.js",
-      "../../../assets/js/index.js",
       "../../../assets/js/feather.min.js",
-      "../../../assets/js/feather-icon.js",
-      "../../../assets/js/ckeditor.js",
+      // "../../../assets/js/feather-icon.js",
+      // "../../../assets/js/ckeditor.js",
       "../../../assets/js/styles.js",
       "../../../assets/js/jquery.js",
-      "../../../assets/js/ckeditor.custom.js",
+      // "../../../assets/js/ckeditor.custom.js",
       // "../../../assets/js/datepicker.js",
       // "../../../assets/js/datepicker.en.js",
       // "../../../assets/js/datepicker.custom.js",
@@ -111,7 +109,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       // "../../../assets/js/intro-init.js",
       "../../../assets/js/jquery.magnific-popup.js",
       "../../../assets/js/zoom-gallery.js",
-      "../../../assets/js/script.js",]
+      "../../../assets/js/script.js",
+      "../../../assets/js/index.js",
+    
+    ]
       for (let index = 0; index < scripts.length; index++) {
         var myScriptElement = document.createElement("script");
       myScriptElement.src = scripts[index];
@@ -120,7 +121,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
        document.addEventListener("keydown", (event: KeyboardEvent) => {
-      console.log(event.code);
       if (event.code === "Digit1") {
         this.jointImage = "../../assets/images/a.png";
         this.joint = "base";

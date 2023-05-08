@@ -264,10 +264,10 @@
          04. Chitchat Loder js
          ==========================*/
          setTimeout(function() {
-            $('.chitchat-loader').slideUp('slow', function () {
+            $('.chitchat-loader').slideUp('fast', function () {
                 $(this).remove();
             });
-          }, 4000);
+          }, 2000);
          
 
     /*=====================

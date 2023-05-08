@@ -24,22 +24,22 @@ export class WebSocketService {
         if (data.encryptionKey && data.iv) {
           this.encryptionKey = CryptoJS.enc.Hex.parse(data.encryptionKey);
           this.iv = CryptoJS.enc.Hex.parse(data.iv);
-          console.log(this.encryptionKey);
-          console.log(this.iv);
+          // console.log(this.encryptionKey);
+          // console.log(this.iv);
         } else {
           console.log('WebSocket connection opened');
         }
       },
       error: (error) => {
-        console.log("------------------------------")
-        console.log("------------------------------")
+        // console.log("------------------------------")
+        // console.log("------------------------------")
 
         console.error('WebSocket error:', error);
 
         this.disconnect();
         this.connect();
-        console.log("------------------------------")
-          console.log("------------------------------")
+        // console.log("------------------------------")
+          // console.log("------------------------------")
 
       },
       complete: () => {
@@ -50,7 +50,7 @@ export class WebSocketService {
   
 
   public send(message: any): void {
-    console.log(this.socket$.closed);
+    // console.log(this.socket$.closed);
     const startTime = performance.now();
 
     const encryptedMessage = CryptoJS.AES.encrypt(JSON.stringify(message), this.encryptionKey, {

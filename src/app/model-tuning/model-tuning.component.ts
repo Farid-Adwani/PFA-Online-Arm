@@ -29,6 +29,5 @@ export class ModelTuningComponent {
       this.selfieMode
     );
     this.itemEvent.emit(tuning);
-    console.log("sendinnnnng");
   }
 }

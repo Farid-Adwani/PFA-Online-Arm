@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Serie } from './serie';
 import { Move } from './move';
+import { Subscription } from 'rxjs';
+import { OperatorComponent } from '../operator/operator.component';
+import { DataSharingService } from '../services/dataSharing.service';
 
 @Component({
   selector: 'app-my-series',
@@ -15,11 +18,40 @@ export class MySeriesComponent {
   public tempName : string = "My Serie";
 
   public tempSerie : Serie= new Serie();
-  public tempMove : Move = new Move();
+  public tempMove : Move = new Move(0,0,0,0,0,0,0);
+   
   public tempDate : Date = new Date();
+  public subscription: Subscription = new Subscription();
+  public playingSerie : Serie= new Serie();
 
+  
 
+  constructor(private dataSharingService: DataSharingService) {
 
+    this.subscription = this.dataSharingService.getData().subscribe(value => {
+      if(value.constructor.name=="Move"){
+      if (value.base!=0){
+        this.tempMove.base=value.base
+      }
+      if (value.axis1!=0){
+        this.tempMove.axis1=value.axis1
+      }
+      if (value.axis2!=0){
+        this.tempMove.axis2=value.axis2
+      }
+      if (value.rotation!=0){
+        this.tempMove.rotation=value.rotation
+      }
+      if (value.up_down!=0){
+        this.tempMove.up_down=value.up_down
+      }
+      if (value.gripper!=0){
+        this.tempMove.gripper=value.gripper
+      }
+      }
+  });
+
+  }
 
   
 
@@ -28,6 +60,9 @@ export class MySeriesComponent {
   }
 
   ngOnInit(){
+
+ 
+
     this.series.push(new Serie("Serie1",new Date,false,this.getRandomColor(),[]));
     this.series.push(new Serie("Serie2",new Date,false,this.getRandomColor(),[]));
     this.series.push(new Serie("Serie3",new Date,false,this.getRandomColor(),[]));
@@ -36,7 +71,13 @@ export class MySeriesComponent {
   }
 
   playSerie(index:number){
+    for (let i = 0; i < this.series.length; i++) {
+      this.series[i].playing=false;
+      
+    }
     this.series[index].playing=true;
+    this.playingSerie=this.series[index];
+     this.dataSharingService.sendData(this.playingSerie);
   }
 
   endSerie(index:number){
@@ -45,6 +86,10 @@ export class MySeriesComponent {
 
   }
   setSaving(state:boolean){
+    for (let i = 0; i < this.series.length; i++) {
+      this.series[i].playing=false;
+      
+    }
     this.saving=state;
     if(!state){
       this.delaying=false;
@@ -94,12 +139,11 @@ export class MySeriesComponent {
 
     this.tempSerie.color=this.getRandomColor();
 
-    this.series.push(Object.assign({}, this.tempSerie));
+    this.series.push(Object.assign(new Serie(), this.tempSerie));
     this.setSaving(false);
   }
 
   updateName(){
-    console.log(this.tempSerie)
   }
 
   debugSerie(selected:Serie){
@@ -113,27 +157,18 @@ export class MySeriesComponent {
     this.tempMove.rotation=0;
     this.tempMove.up_down=0;
     this.tempMove.gripper=0;
-    this.tempMove.delay=1000;
 
     this.tempMove.delay=new Date().getTime() - this.tempDate.getTime() ;
 
 
-    this.tempSerie.moves.push(Object.assign({}, this.tempMove));
+    this.tempSerie.moves.push(Object.assign(new Move(), this.tempMove));
 
   }
 
   createMove(){
     
-    this.tempMove.base=1;
-      this.tempMove.axis1=2;
-      this.tempMove.axis2=3;
-      this.tempMove.rotation=4;
-      this.tempMove.up_down=5;
-      this.tempMove.gripper=6;
       this.tempMove.delay=0;
-
-
-      this.tempSerie.moves.push(Object.assign({}, this.tempMove));
+      this.tempSerie.moves.push(Object.assign(new Move(), this.tempMove));
 
   }
   getDelayText(){
@@ -143,5 +178,9 @@ export class MySeriesComponent {
       return "Delay"
     }
   }
+
+   ngOnDestroy() {
+    this.subscription.unsubscribe();
+}
 
 }

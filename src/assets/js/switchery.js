@@ -1902,7 +1902,13 @@ Switchery.prototype.isChecked = function() {
  */
 
 Switchery.prototype.isDisabled = function() {
-  return this.options.disabled || this.element.disabled || this.element.readOnly;
+	result=false;
+	try {
+		result=this.options.disabled || this.element.disabled || this.element.readOnly;
+	} catch (error) {
+		
+	}
+  return result;
 };
 
 /**

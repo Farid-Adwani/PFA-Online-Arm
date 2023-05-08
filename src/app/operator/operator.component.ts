@@ -1,9 +1,13 @@
-import { AfterViewInit, Component, DoCheck, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DoCheck, ElementRef, EventEmitter, HostListener, Injectable, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Hands, Results, HAND_CONNECTIONS, Options } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { Camera } from '@mediapipe/camera_utils'
 import { WebSocketService } from '../services/web-socket.service';
 import { Tuning } from '../model-tuning/Tuning';
+import { Move } from '../my-series/move';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { DataSharingService } from '../services/dataSharing.service';
+import { Serie } from '../my-series/serie';
 
 @Component({
   selector: 'app-operator',
@@ -12,10 +16,12 @@ import { Tuning } from '../model-tuning/Tuning';
 })
 
 
-export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
+
+export class OperatorComponent implements OnInit, AfterViewInit, OnChanges  {
 
 
   public message!: any;
+  public move: Move = new Move(0,0,0,0,0,0,0);
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   private options: Options = {
@@ -26,6 +32,14 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
     minTrackingConfidence: 0.8
   }
   private hands!: Hands;
+  public subscription: Subscription = new Subscription();
+  public playingSerie : Serie= new Serie();
+  public cursor : number= 0;
+  public isDelay : boolean= false;
+  public startDelay : Date =new Date();
+
+
+  
 
   @Input() public params:Tuning = new Tuning(1,1,0.8,0.8,false); 
   @Input() public joint: string = "stop";
@@ -33,9 +47,27 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Output() sendFps: EventEmitter<number> = new EventEmitter<number>();
 
+  constructor (private webSocketService: WebSocketService,private dataSharingService: DataSharingService) { 
+    this.subscription = this.dataSharingService.getData().subscribe(value => {
+
+      if(value.constructor.name=="Serie"){
+        this.cursor=0;
+        this.playingSerie=value;
+
+
+      }
+      });
+  }
+
+  
+
+  
+
+    sendData(): void {
+        this.dataSharingService.sendData(this.move);
+    }
 
   public loaded = false;
-  constructor(private webSocketService: WebSocketService) { }
   ngOnChanges(changes: SimpleChanges): void {
     if (this.loaded) {
       if (changes['params']) {
@@ -53,6 +85,9 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
       
     }
   }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+}
 
   ngOnInit(): void {
     this.hands = new Hands({
@@ -67,7 +102,6 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
     // Handle incoming messages
     this.webSocketService.onMessage().subscribe((message: any) => {
       this.message = message;
-      console.log("Received message: " + this.message)
     });
 
   }
@@ -86,6 +120,56 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
       canvasCtx!.clearRect(0, 0, canvasElement.width, canvasElement.height);
       canvasCtx!.drawImage(
         results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+
+
+        if(this.playingSerie.playing){
+
+        if(this.playingSerie.moves.length==0){
+          this.playingSerie.moves.push(new Move(0,0,0,0,0,0,0))
+        }
+        // console.log(this.playingSerie.name , "  ", this.cursor, " move", this.playingSerie.moves[this.cursor]);
+
+        if(this.playingSerie.moves[this.cursor].delay!=0){
+          if(this.isDelay==false){
+            this.startDelay=new Date()
+          }
+          this.isDelay=true;
+
+
+          if(((new Date).getTime()-this.startDelay.getTime())> this.playingSerie.moves[this.cursor].delay){
+            if(this.cursor < (this.playingSerie.moves.length-1)){
+              this.cursor++;
+            }
+          }
+
+        }else{
+          this.isDelay=false;
+
+                  const sent = [
+          this.playingSerie.moves[this.cursor].base,
+          this.playingSerie.moves[this.cursor].axis1,
+          this.playingSerie.moves[this.cursor].axis2,
+          this.playingSerie.moves[this.cursor].rotation,
+          this.playingSerie.moves[this.cursor].up_down,
+          this.playingSerie.moves[this.cursor].gripper,
+        ]
+
+        
+          this.webSocketService.send(sent);
+          if(this.cursor < (this.playingSerie.moves.length-1)){
+            this.cursor++;
+
+          }
+
+        }
+
+
+
+
+
+        
+      }else{
       if (results.multiHandLandmarks.length > 0) {
 
         // Get wrist landmark from first hand
@@ -177,27 +261,33 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
 
         var gripperToSend=Math.trunc(distance * 100);
         gripperToSend=gripperToSend!=0?gripperToSend:1;
+        
+        this.move.base=this.joint=="base" ? rotationToSend: 0;
+        this.move.axis1=this.joint=="axis1" ? axis2ToSend: 0;
+        this.move.axis2=this.joint=="axis2" ? axis2ToSend: 0;
+        this.move.rotation=this.joint=="rotation" ? rotationToSend: 0;
+        this.move.up_down=this.joint=="up_down" ? axis2ToSend: 0;
+        this.move.gripper=this.joint=="gripper" ? gripperToSend: 0;
+
+        this.sendData();this.playingSerie.playing
 
         const sent = [
-          this.joint=="base" ? rotationToSend: 0,
-          this.joint=="axis1" ? axis2ToSend: 0,
-          this.joint=="axis2" ? axis2ToSend: 0,
-          
-          this.joint=="rotation" ? rotationToSend : 0,
-          this.joint=="up_down" ? axis2ToSend: 0,
-          this.joint=="gripper" ? gripperToSend : 0,
-          
+          this.move.base,
+          this.move.axis1,
+          this.move.axis2,
+          this.move.rotation,
+          this.move.up_down,
+          this.move.gripper,
         ]
 
-        
           this.webSocketService.send(sent)
-    console.log(this.params)
 
         drawConnectors(canvasCtx!, landmarks, HAND_CONNECTIONS,
           { color: '#00FF00', lineWidth: 5 });
         drawLandmarks(canvasCtx!, landmarks, { color: '#FF0000', lineWidth: 2 });
 
       }
+    }
       canvasCtx!.restore();
     });
 
@@ -217,4 +307,6 @@ export class OperatorComponent implements OnInit, AfterViewInit, OnChanges {
     });
     camera.start();
   }
+
+
 }
