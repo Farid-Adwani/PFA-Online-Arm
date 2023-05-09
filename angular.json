@@ -39,7 +39,7 @@
                           
                         ],
                         "scripts": [
-                            
+                            "node_modules/@apizee/apirtc/apiRTC.min.js"
                             
 
                         ]
@@ -82,6 +82,8 @@
                     },
                     "defaultConfiguration": "development"
                 },
+
+                
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
