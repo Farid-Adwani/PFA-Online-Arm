@@ -60,7 +60,7 @@ export class OperationComponent implements AfterViewInit {
       // 4 BIS/ ADD EVENT LISTENER : WHEN STREAM IS ADDED/REMOVED TO/FROM THE CONVERSATION
       //=====================================================
       conversation.on('streamAdded', (stream: any) => {
-        stream.addInDiv('remote-container', 'remote-media-' + stream.streamId, {}, false);
+        stream.addInDiv('remote-container', 'remote-media-' + stream.streamId,{'style':'width: -webkit-fill-available;height: -webkit-fill-available;'}, false);
       }).on('streamRemoved', (stream: any) => {
         stream.removeFromDiv('remote-container', 'remote-media-' + stream.streamId);
       });

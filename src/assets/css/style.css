@@ -58857,6 +58857,8 @@ audio,
 canvas,
 progress,
 video {
+width: -webkit-fill-available;
+height: -webkit-fill-available;
     display: inline-block
 }
 
